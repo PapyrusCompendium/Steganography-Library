@@ -1,16 +1,15 @@
-﻿using System.Resources;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Steganography Library")]
-[assembly: AssemblyDescription("My own implementation of steganography, using a LSB.")]
+[assembly: AssemblyTitle("stegolibtest")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("PapyrusCompendium")]
-[assembly: AssemblyProduct("Steganography Library")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("stegolibtest")]
 [assembly: AssemblyCopyright("Copyright ©  2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -21,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("90395b40-bf5a-4a65-8e95-5bd91e21347c")]
+[assembly: Guid("9286bf31-b9c4-4b92-a990-980e88b6be82")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -35,5 +34,3 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
-[assembly: NeutralResourcesLanguage("en")]
-
