@@ -6,20 +6,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Steganography_Library
+namespace Steganography
 {
     public class SteganographicImage
     {
         public Bitmap Stegnograph { get; private set; }
-        public SteganographicImage(Bitmap image)
-        {
-            this.Stegnograph = image;
-        }
+        public SteganographicImage(Bitmap image) =>
+            Stegnograph = image;
 
-        public bool FitsIntoImage(byte[] data) => data.Length <= TotalCapacity();
-        public int TotalCapacity() => ((Stegnograph.Width * Stegnograph.Height) - 8) / 2;
-        private bool GetLSB(byte value) => (value & 1) != 0;
-        private byte[] GetColourBytes(Color colour) => new byte[4] { colour.A, colour.R, colour.G, colour.B };
+        public bool FitsIntoImage(byte[] data) =>
+            data.Length <= TotalCapacity;
+
+        public int TotalCapacity =>
+            ((Stegnograph.Width * Stegnograph.Height) - 8) / 2;
+
+        private bool GetLSB(byte value) =>
+            (value & 1) != 0;
+
+        private byte[] GetColourBytes(Color colour) =>
+            new byte[4] { colour.A, colour.R, colour.G, colour.B };
 
         private byte SetLSB(bool bit, byte value)
         {

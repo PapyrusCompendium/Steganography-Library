@@ -20,7 +20,7 @@ namespace Steganography_Library
             aesProvider.IV = GenerateSecureKey(aesProvider.BlockSize / 8);
 
             //We are not saving this hash so we do not need a salt.
-            aesProvider.Key = new PasswordDeriveBytes(password, System.Text.Encoding.UTF8.GetBytes("")).GetBytes(aesProvider.KeySize / 8);
+            aesProvider.Key = new PasswordDeriveBytes(password, Encoding.UTF8.GetBytes("")).GetBytes(aesProvider.KeySize / 8);
 
             ICryptoTransform encrypter = aesProvider.CreateEncryptor();
 
@@ -44,7 +44,7 @@ namespace Steganography_Library
             aesProvider.KeySize = keySize;
             aesProvider.IV = data.Take(aesProvider.BlockSize / 8).ToArray();
 
-            aesProvider.Key = new PasswordDeriveBytes(password, System.Text.Encoding.UTF8.GetBytes("")).GetBytes(aesProvider.KeySize / 8);
+            aesProvider.Key = new PasswordDeriveBytes(password, Encoding.UTF8.GetBytes("")).GetBytes(aesProvider.KeySize / 8);
 
             byte[] decrypted = new byte[data.Length - aesProvider.BlockSize / 8];
             ICryptoTransform decrypter = aesProvider.CreateDecryptor();
