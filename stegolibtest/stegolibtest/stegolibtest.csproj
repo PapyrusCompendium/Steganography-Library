@@ -33,9 +33,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Steganography-Library">
-      <HintPath>..\..\Steganography-Library\Steganography-Library\bin\Debug\Steganography-Library.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -52,6 +49,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Steganography-Library\Steganography-Library\Steganography-Library.csproj">
+      <Project>{90395b40-bf5a-4a65-8e95-5bd91e21347c}</Project>
+      <Name>Steganography-Library</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
