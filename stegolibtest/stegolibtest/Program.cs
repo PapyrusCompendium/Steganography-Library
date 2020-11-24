@@ -10,7 +10,7 @@ namespace stegolibtest
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             //Must be SAVED as a png, can be loaded FROM any format!
             SteganographicImage stegoImage = new SteganographicImage(new Bitmap(Image.FromFile("Image.png")));
