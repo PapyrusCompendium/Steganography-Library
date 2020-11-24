@@ -13,8 +13,7 @@ implementation I am only storing string data, but this can be made to store anyt
 to other images completely, like QR codes.  
 
 # How do I use this?
-This version of my implementation is built for developer advantage. It is a consumable code library giving developers ease  
-of access to writing their own steganography tools in C#. Simply import this DLL to your code base and you are ready to go!  
+This version of my implementation is built for developer advantage. It is a consumable code library giving developers ease of access to writing their own steganography tools in C#. Simply import this DLL to your code base and you are ready to go!  
 ```cs
 using Steganography_Library;
 using System;
