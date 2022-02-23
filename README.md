@@ -16,13 +16,9 @@ to other images completely, like QR codes.
 This version of my implementation is built for developer advantage. It is a consumable code library giving developers ease  
 of access to writing their own steganography tools in C#. Simply import this DLL to your code base and you are ready to go!  
 ```cs
-using Steganography_Library;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+using SteganographyLibrary;
 
 namespace Steganography
 {
@@ -30,12 +26,12 @@ namespace Steganography
     {
         static void Main(string[] args)
         {
-            //Must be SAVED as a png, can be loaded FROM any format!
-            SteganographicImage stegoImage = new SteganographicImage(new Bitmap(Image.FromFile("Image.png")));
-            stegoImage.EncodeImage(Encoding.UTF8.GetBytes("Secret Message")).Save("NewImage.png");
+            // Must be SAVED as a png, can be loaded FROM any format!
+            var stegoImage = new SteganographicImage(new Bitmap(Image.FromFile("Image.png")));
+            var encodedImage = stegoImage.EncodeImage(Encoding.UTF8.GetBytes("Secret Message"));
 
-            //Decoding, load from png
-            stegoImage = new SteganographicImage(new Bitmap(Image.FromFile("NewImage.png")));
+            // Decoding, load from png
+            stegoImage = new SteganographicImage(encodedImage);
             Console.WriteLine(stegoImage.DecodeImage());
         }
     }
