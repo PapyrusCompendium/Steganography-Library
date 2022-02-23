@@ -12,27 +12,25 @@ in one pixel without modifying the image enough that it is visible to the naked 
 implementation I am only storing string data, but this can be made to store anything from files  
 to other images completely, like QR codes.  
 
-# How do I use this?
-This version of my implementation is built for developer advantage. It is a consumable code library giving developers ease  
-of access to writing their own steganography tools in C#. Simply import this DLL to your code base and you are ready to go!  
 ```cs
 using System.Drawing;
+using System.Text;
 
-using SteganographyLibrary;
-
+using Xunit;
 namespace Steganography
 {
     class Program
     {
         static void Main(string[] args)
         {
-            // Must be SAVED as a png, can be loaded FROM any format!
-            var stegoImage = new SteganographicImage(new Bitmap(Image.FromFile("Image.png")));
-            var encodedImage = stegoImage.EncodeImage(Encoding.UTF8.GetBytes("Secret Message"));
+            var encodedMessage = "This is an encoded message";
+            var stegoImage = new SteganographicImage(new Bitmap(Image.FromFile("TestImage.png")));
+            var encodedImage = stegoImage.EncodeDataInBitmap(Encoding.UTF8.GetBytes(encodedMessage));
 
-            // Decoding, load from png
             stegoImage = new SteganographicImage(encodedImage);
-            Console.WriteLine(stegoImage.DecodeImage());
+            var encodedData = stegoImage.GetEncodedDataFromBitmap();
+
+            Assert.Equal(encodedMessage, Encoding.UTF8.GetString(encodedData));
         }
     }
 }
