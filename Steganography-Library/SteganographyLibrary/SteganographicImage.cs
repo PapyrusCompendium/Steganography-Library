@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 
 using SteganographyLibrary.Interfaces;
 using SteganographyLibrary.Models;
@@ -42,7 +43,11 @@ namespace SteganographyLibrary {
 
                     if (bitIndex >= 8) {
                         bitIndex = 0;
-                        bitIndex++;
+                        byteIndex++;
+
+                        if(byteIndex >= formattedDataBytes.Length) {
+                            return _rawImage;
+                        }
                     }
                 }
             }
@@ -62,15 +67,71 @@ namespace SteganographyLibrary {
 
             var formattedDataBytes = dataFormatting.GetBytes();
 
-            if (ByteCapacity < formattedDataBytes.Length) {
-                throw new System.Exception("Image could not contain the amount of data desired.");
-            }
-
-            return formattedDataBytes;
+            return ByteCapacity < formattedDataBytes.Length
+                ? throw new System.Exception("Image could not contain the amount of data desired.")
+                : formattedDataBytes;
         }
 
         public byte[] GetEncodedDataFromBitmap(string aesKey = "") {
+            var encodedData = DecodeBitmapData();
 
+            var dataLength = BitConverter.ToInt32(encodedData, 0);
+            var encrypted = BitConverter.ToBoolean(encodedData, 4);
+            var data = new byte[dataLength];
+            Array.Copy(encodedData, 5, data, 0, data.Length);
+
+            var dataFormatting = new DataFormat(data, encrypted);
+
+            if (dataFormatting.Encrypted && string.IsNullOrEmpty(aesKey)) {
+                throw new Exception("Missing Aes Key!");
+            }
+
+            if (dataFormatting.Encrypted) {
+                var decryptedData = Cryptography.Decrypt(dataFormatting.Data, aesKey);
+                dataFormatting = new DataFormat(decryptedData, false);
+            }
+
+            return dataFormatting.Data;
+        }
+
+        private byte[] DecodeBitmapData() {
+            var encodedData = new byte[ByteCapacity];
+
+            var byteIndex = 0;
+            var bitIndex = 0;
+
+            byte currentByte = 0;
+            for (var x = 0; x < _rawImage.Width; x++) {
+                for (var y = 0; y < _rawImage.Height; y++) {
+                    var color = _rawImage.GetPixel(x, y);
+
+                    var lsb = _lsbEncoder.GetLsb(color.A);
+                    _lsbEncoder.SetLsb(currentByte, lsb);
+                    currentByte <<= 1;
+
+                    lsb = _lsbEncoder.GetLsb(color.R);
+                    _lsbEncoder.SetLsb(currentByte, lsb);
+                    currentByte <<= 1;
+
+                    lsb = _lsbEncoder.GetLsb(color.G);
+                    _lsbEncoder.SetLsb(currentByte, lsb);
+                    currentByte <<= 1;
+
+                    lsb = _lsbEncoder.GetLsb(color.B);
+                    _lsbEncoder.SetLsb(currentByte, lsb);
+                    currentByte <<= 1;
+                    bitIndex += 4;
+
+                    if (bitIndex >= 8) {
+                        bitIndex = 0;
+
+                        encodedData[byteIndex] = currentByte;
+                        byteIndex++;
+                    }
+                }
+            }
+
+            return encodedData;
         }
     }
 }

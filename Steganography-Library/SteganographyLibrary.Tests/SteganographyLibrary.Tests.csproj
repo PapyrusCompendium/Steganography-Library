@@ -23,4 +23,10 @@
     <ProjectReference Include="..\SteganographyLibrary\SteganographyLibrary.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="TestImage.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
