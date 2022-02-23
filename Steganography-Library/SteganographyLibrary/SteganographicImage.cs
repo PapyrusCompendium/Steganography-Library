@@ -30,22 +30,23 @@ namespace SteganographyLibrary {
                     var color = _rawImage.GetPixel(x, y);
                     var currentByte = formattedDataBytes[byteIndex];
 
-                    _lsbEncoder.SetLsb(color.A, (currentByte & (1 << bitIndex)) == 1);
+                    var alpha = _lsbEncoder.SetLsb(color.A, (currentByte & (1 << bitIndex)) > 0);
                     bitIndex++;
-                    _lsbEncoder.SetLsb(color.R, (currentByte & (1 << bitIndex)) == 1);
+                    var red = _lsbEncoder.SetLsb(color.R, (currentByte & (1 << bitIndex)) > 0);
                     bitIndex++;
-                    _lsbEncoder.SetLsb(color.G, (currentByte & (1 << bitIndex)) == 1);
+                    var green = _lsbEncoder.SetLsb(color.G, (currentByte & (1 << bitIndex)) > 0);
                     bitIndex++;
-                    _lsbEncoder.SetLsb(color.B, (currentByte & (1 << bitIndex)) == 1);
+                    var blue = _lsbEncoder.SetLsb(color.B, (currentByte & (1 << bitIndex)) > 0 );
                     bitIndex++;
 
+                    color = Color.FromArgb(alpha, red, green, blue);
                     _rawImage.SetPixel(x, y, color);
 
                     if (bitIndex >= 8) {
                         bitIndex = 0;
                         byteIndex++;
 
-                        if(byteIndex >= formattedDataBytes.Length) {
+                        if (byteIndex >= formattedDataBytes.Length) {
                             return _rawImage;
                         }
                     }
@@ -57,7 +58,7 @@ namespace SteganographyLibrary {
 
         private byte[] FormatData(ref byte[] encodedData, string aesKey) {
             DataFormat dataFormatting;
-            if (string.IsNullOrEmpty(aesKey)) {
+            if (!string.IsNullOrEmpty(aesKey)) {
                 encodedData = Cryptography.Encrypt(encodedData, aesKey);
                 dataFormatting = new DataFormat(encodedData, true);
             }
@@ -68,7 +69,7 @@ namespace SteganographyLibrary {
             var formattedDataBytes = dataFormatting.GetBytes();
 
             return ByteCapacity < formattedDataBytes.Length
-                ? throw new System.Exception("Image could not contain the amount of data desired.")
+                ? throw new Exception("Image could not contain the amount of data desired.")
                 : formattedDataBytes;
         }
 
@@ -105,28 +106,29 @@ namespace SteganographyLibrary {
                 for (var y = 0; y < _rawImage.Height; y++) {
                     var color = _rawImage.GetPixel(x, y);
 
-                    var lsb = _lsbEncoder.GetLsb(color.A);
-                    _lsbEncoder.SetLsb(currentByte, lsb);
-                    currentByte <<= 1;
+                    var lsb = _lsbEncoder.GetLsb(color.A) ? 1 : 0;
+                    currentByte |= (byte)(lsb << bitIndex);
+                    bitIndex++;
 
-                    lsb = _lsbEncoder.GetLsb(color.R);
-                    _lsbEncoder.SetLsb(currentByte, lsb);
-                    currentByte <<= 1;
+                    lsb = _lsbEncoder.GetLsb(color.R) ? 1 : 0;
+                    currentByte |= (byte)(lsb << bitIndex);
+                    bitIndex++;
 
-                    lsb = _lsbEncoder.GetLsb(color.G);
-                    _lsbEncoder.SetLsb(currentByte, lsb);
-                    currentByte <<= 1;
+                    lsb = _lsbEncoder.GetLsb(color.G) ? 1 : 0;
+                    currentByte |= (byte)(lsb << bitIndex);
+                    bitIndex++;
 
-                    lsb = _lsbEncoder.GetLsb(color.B);
-                    _lsbEncoder.SetLsb(currentByte, lsb);
-                    currentByte <<= 1;
-                    bitIndex += 4;
+                    lsb = _lsbEncoder.GetLsb(color.B) ? 1 : 0;
+                    currentByte |= (byte)(lsb << bitIndex);
+                    bitIndex++;
 
                     if (bitIndex >= 8) {
                         bitIndex = 0;
 
                         encodedData[byteIndex] = currentByte;
+                        currentByte = 0;
                         byteIndex++;
+                        continue;
                     }
                 }
             }
