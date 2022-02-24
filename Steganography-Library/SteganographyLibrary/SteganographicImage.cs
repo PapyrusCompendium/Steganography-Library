@@ -3,6 +3,7 @@
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
+using SteganographyLibrary.Exceptions;
 using SteganographyLibrary.Interfaces;
 using SteganographyLibrary.Models;
 
@@ -72,7 +73,7 @@ namespace SteganographyLibrary {
             var formattedDataBytes = dataFormatting.GetBytes();
 
             return ByteCapacity < formattedDataBytes.Length
-                ? throw new Exception("Image could not contain the amount of data desired.")
+                ? throw new CapacityException("Image could not contain the amount of data desired.")
                 : formattedDataBytes;
         }
 
@@ -87,7 +88,7 @@ namespace SteganographyLibrary {
             var dataFormatting = new DataFormat(data, encrypted);
 
             if (dataFormatting.Encrypted && string.IsNullOrEmpty(aesKey)) {
-                throw new Exception("Missing Aes Key!");
+                throw new AesException("Missing Aes Key!");
             }
 
             if (dataFormatting.Encrypted) {
