@@ -17,10 +17,13 @@ implementation I am only storing string data, but this can be made to store anyt
 to other images completely, like QR codes.  
 
 ```cs
-using System.Drawing;
 using System.Text;
 
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+
 using Xunit;
+
 namespace Steganography
 {
     class Program
@@ -28,12 +31,13 @@ namespace Steganography
         static void Main(string[] args)
         {
             var encodedMessage = "This is an encoded message";
-            var stegoImage = new SteganographicImage(new Bitmap(Image.FromFile("TestImage.png")));
-            var encodedImage = stegoImage.EncodeDataInBitmap(Encoding.UTF8.GetBytes(encodedMessage));
+
+            var stegoImage = new SteganographicImage(Image.Load<Rgba32>("TestImage.png"));
+            var encodedImage = stegoImage.EncodeDataInImage(Encoding.UTF8.GetBytes(encodedMessage));
 
             stegoImage = new SteganographicImage(encodedImage);
-            var encodedData = stegoImage.GetEncodedDataFromBitmap();
-
+            var encodedData = stegoImage.GetEncodedDataFromImage();
+            
             Assert.Equal(encodedMessage, Encoding.UTF8.GetString(encodedData));
         }
     }
