@@ -9,6 +9,17 @@ on:
   workflow_dispatch:
   
 jobs:
+  test:
+    env:
+      BUILD_CONFIG: 'Release'
+      SOLUTION: 'Steganography-Library.sln'
+      
+    runs-on: ubuntu-latest
+    steps:
+    
+    - name: Test
+      run: dotnet test $SOLUTION --no-restore --verbosity normal
+    
   build:
     env:
       BUILD_CONFIG: 'Release'
@@ -32,9 +43,6 @@ jobs:
 
     - name: Build
       run: dotnet build $SOLUTION --configuration $BUILD_CONFIG --no-restore /p:Version=1.1.$GITHUB_RUN_NUMBER
-
-    - name: Test
-      run: dotnet test $SOLUTION --no-restore --verbosity normal
 
     - name: Publish
       if: startsWith(github.ref, 'refs/heads/master')
