@@ -10,17 +10,15 @@ on:
   
 jobs:
   test:
-    env:
-      BUILD_CONFIG: 'Release'
-      SOLUTION: 'Steganography-Library.sln'
-      
     runs-on: ubuntu-latest
     steps:
     
     - name: Test
-      run: dotnet test $SOLUTION --no-restore --verbosity normal
+      run: dotnet test --no-restore --verbosity normal
     
   build:
+    needs:
+    - test
     env:
       BUILD_CONFIG: 'Release'
       SOLUTION: 'Steganography-Library.sln'
