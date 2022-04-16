@@ -31,7 +31,7 @@ jobs:
         dotnet-version: 5.0.x
 
     - name: Build
-      run: dotnet build $SOLUTION --configuration $BUILD_CONFIG --no-restore /p:Version=1.0.$GITHUB_RUN_NUMBER
+      run: dotnet build $SOLUTION --configuration $BUILD_CONFIG --no-restore /p:Version=1.1.$GITHUB_RUN_NUMBER
 
     - name: Test
       run: dotnet test $SOLUTION --no-restore --verbosity normal
