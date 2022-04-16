@@ -7,7 +7,7 @@
 
 # Online Version
 Try an online implementation of this lib here:  
-https://papyruscompendium.dev/Steganography
+https://papyruscompendium.dev/Widgets/Steganography
 
 This is my own implementation of steganography, using a LSB (Least Significant Bit) method.  
 The way this works is by taking the LSB for every byte in a pixel (There are four in this case ARGB)  
