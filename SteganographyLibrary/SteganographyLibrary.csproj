@@ -2,10 +2,36 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
+	  <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>PapyrusCompendium</Authors>
+    <Company />
+    <PackageProjectUrl>https://github.com/PapyrusCompendium/Steganography-Library</PackageProjectUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/PapyrusCompendium/Steganography-Library</RepositoryUrl>
+    <PackageReleaseNotes>Steganography, using a LSB (Least Significant Bit) method in C#.</PackageReleaseNotes>
+    <PackageTags>Steganography</PackageTags>
+	  <PackageIcon>images\Steganography.png</PackageIcon>
+	  <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="SixLabors.ImageSharp" Version="2.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="images\" />
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+	  <None Include="images\Steganography.png" Pack="true" Visible="false" PackagePath="images\Steganography.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="images\Steganography.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

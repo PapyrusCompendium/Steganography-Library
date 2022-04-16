@@ -3,13 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28803.352
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteganographyLibrary", "SteganographyLibrary\SteganographyLibrary.csproj", "{CC09E568-578D-4A83-8376-3312EFD57083}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SteganographyLibrary", "SteganographyLibrary\SteganographyLibrary.csproj", "{CC09E568-578D-4A83-8376-3312EFD57083}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteganographyLibrary.Tests", "SteganographyLibrary.Tests\SteganographyLibrary.Tests.csproj", "{108A5E30-801B-4BBD-A984-14C887B63DEA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SteganographyLibrary.Tests", "SteganographyLibrary.Tests\SteganographyLibrary.Tests.csproj", "{108A5E30-801B-4BBD-A984-14C887B63DEA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D9CE504F-AEF5-496F-BB41-639A7B4FDA8D}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		README.md = README.md
 	EndProjectSection
 EndProject
 Global
