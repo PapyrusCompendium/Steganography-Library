@@ -6,79 +6,31 @@ using SixLabors.ImageSharp.PixelFormats;
 using SteganographyLibrary.Exceptions;
 using SteganographyLibrary.Interfaces;
 using SteganographyLibrary.Models;
+using SteganographyLibrary.SteganographyReversing;
 
 namespace SteganographyLibrary {
-    public class SteganographicImage {
-        private readonly Image<Rgba32> _rawImage;
+    public class SteganographicImage : ISteganographicImage {
+        public Image<Rgba32> Image { get; }
+
         private readonly ILsbEncoder _lsbEncoder;
 
         private int ByteCapacity {
             get {
-                return _rawImage.Width * _rawImage.Height / 2;
+                return Image.Width * Image.Height / 2;
             }
         }
 
         public SteganographicImage(Image<Rgba32> rawImage) {
-            _rawImage = rawImage;
+            Image = rawImage;
             _lsbEncoder = new LsbEncoder();
         }
 
-        public Image<Rgba32> EncodeDataInImage(byte[] encodedData, string aesKey = "") {
-            var formattedDataBytes = FormatData(ref encodedData, aesKey);
-
-            var byteIndex = 0;
-            var bitIndex = 0;
-
-            for (var x = 0; x < _rawImage.Width; x++) {
-                for (var y = 0; y < _rawImage.Height; y++) {
-                    var color = _rawImage[x, y];
-                    var currentByte = formattedDataBytes[byteIndex];
-
-                    var alpha = _lsbEncoder.SetLsb(color.A, (currentByte & (1 << bitIndex)) > 0);
-                    bitIndex++;
-                    var red = _lsbEncoder.SetLsb(color.R, (currentByte & (1 << bitIndex)) > 0);
-                    bitIndex++;
-                    var green = _lsbEncoder.SetLsb(color.G, (currentByte & (1 << bitIndex)) > 0);
-                    bitIndex++;
-                    var blue = _lsbEncoder.SetLsb(color.B, (currentByte & (1 << bitIndex)) > 0);
-                    bitIndex++;
-
-                    color = Color.FromRgba(red, green, blue, alpha);
-                    _rawImage[x, y] = color;
-
-                    if (bitIndex >= 8) {
-                        bitIndex = 0;
-                        byteIndex++;
-
-                        if (byteIndex >= formattedDataBytes.Length) {
-                            return _rawImage;
-                        }
-                    }
-                }
-            }
-
-            return _rawImage;
+        public IImageAnalysis GetImageAnalysis() {
+            return new ImageAnalysis(this);
         }
 
-        private byte[] FormatData(ref byte[] encodedData, string aesKey) {
-            DataFormat dataFormatting;
-            if (!string.IsNullOrEmpty(aesKey)) {
-                encodedData = Cryptography.Encrypt(encodedData, aesKey);
-                dataFormatting = new DataFormat(encodedData, true);
-            }
-            else {
-                dataFormatting = new DataFormat(encodedData, false);
-            }
-
-            var formattedDataBytes = dataFormatting.GetBytes();
-
-            return ByteCapacity < formattedDataBytes.Length
-                ? throw new CapacityException("Image could not contain the amount of data desired.")
-                : formattedDataBytes;
-        }
-
-        public byte[] GetEncodedDataFromImage(string aesKey = "") {
-            var encodedData = DecodeImageData();
+        public byte[] DecodedDataFromImage(string aesKey = default) {
+            var encodedData = DecodeRawImageData();
 
             var dataLength = BitConverter.ToInt32(encodedData, 0);
             var encrypted = BitConverter.ToBoolean(encodedData, 4);
@@ -99,45 +51,30 @@ namespace SteganographyLibrary {
             return dataFormatting.Data;
         }
 
-        private byte[] DecodeImageData() {
-            var encodedData = new byte[ByteCapacity];
+        public Image<Rgba32> EncodeDataInImage(byte[] encodedData, string aesKey = default, string encodingOrderMask = "argb") {
+            var formattedDataBytes = FormatData(ref encodedData, aesKey);
+            return _lsbEncoder.EncodeDataInImage(formattedDataBytes, Image, encodingOrderMask);
+        }
 
-            var byteIndex = 0;
-            var bitIndex = 0;
+        public byte[] DecodeRawImageData(string encodingOrderMask = "argb") {
+            return _lsbEncoder.DecodeRawImageData(Image, encodingOrderMask);
+        }
 
-            byte currentByte = 0;
-            for (var x = 0; x < _rawImage.Width; x++) {
-                for (var y = 0; y < _rawImage.Height; y++) {
-                    var color = _rawImage[x, y];
-
-                    var lsb = _lsbEncoder.GetLsb(color.A) ? 1 : 0;
-                    currentByte |= (byte)(lsb << bitIndex);
-                    bitIndex++;
-
-                    lsb = _lsbEncoder.GetLsb(color.R) ? 1 : 0;
-                    currentByte |= (byte)(lsb << bitIndex);
-                    bitIndex++;
-
-                    lsb = _lsbEncoder.GetLsb(color.G) ? 1 : 0;
-                    currentByte |= (byte)(lsb << bitIndex);
-                    bitIndex++;
-
-                    lsb = _lsbEncoder.GetLsb(color.B) ? 1 : 0;
-                    currentByte |= (byte)(lsb << bitIndex);
-                    bitIndex++;
-
-                    if (bitIndex >= 8) {
-                        bitIndex = 0;
-
-                        encodedData[byteIndex] = currentByte;
-                        currentByte = 0;
-                        byteIndex++;
-                        continue;
-                    }
-                }
+        private byte[] FormatData(ref byte[] encodedData, string aesKey) {
+            DataFormat dataFormatting;
+            if (!string.IsNullOrEmpty(aesKey)) {
+                encodedData = Cryptography.Encrypt(encodedData, aesKey);
+                dataFormatting = new DataFormat(encodedData, true);
+            }
+            else {
+                dataFormatting = new DataFormat(encodedData, false);
             }
 
-            return encodedData;
+            var formattedDataBytes = dataFormatting.GetBytes();
+
+            return ByteCapacity < formattedDataBytes.Length
+                ? throw new CapacityException("Image could not contain the amount of data desired.")
+                : formattedDataBytes;
         }
     }
 }

@@ -1,6 +1,6 @@
 # Steganography
 ![Nuget](https://img.shields.io/nuget/v/SteganographyLibrary)
-[![Github All Releases](https://img.shields.io/github/downloads/PapyrusCompendium/Steganography-Library/total.svg)]()
+![Nuget](https://img.shields.io/nuget/dt/SteganographyLibrary)
 [![Github Issues](https://img.shields.io/github/issues/PapyrusCompendium/Steganography-Library.svg)]()
 [![Github Stars](https://img.shields.io/github/stars/PapyrusCompendium/Steganography-Library.svg)]()
 [![Github License](https://img.shields.io/github/license/PapyrusCompendium/Steganography-Library.svg)]()

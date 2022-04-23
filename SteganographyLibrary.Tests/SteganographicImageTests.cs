@@ -17,7 +17,7 @@ namespace SteganographyLibrary.Tests {
             var encodedImage = stegoImage.EncodeDataInImage(Encoding.UTF8.GetBytes(encodedMessage));
 
             stegoImage = new SteganographicImage(encodedImage);
-            var encodedData = stegoImage.GetEncodedDataFromImage();
+            var encodedData = stegoImage.DecodedDataFromImage();
 
             Assert.Equal(encodedMessage, Encoding.UTF8.GetString(encodedData));
         }
@@ -30,7 +30,7 @@ namespace SteganographyLibrary.Tests {
             var encodedImage = stegoImage.EncodeDataInImage(Encoding.UTF8.GetBytes(encodedMessage), TEST_PASSWORD);
 
             stegoImage = new SteganographicImage(encodedImage);
-            var encodedData = stegoImage.GetEncodedDataFromImage(TEST_PASSWORD);
+            var encodedData = stegoImage.DecodedDataFromImage(TEST_PASSWORD);
 
             Assert.Equal(encodedMessage, Encoding.UTF8.GetString(encodedData));
         }
