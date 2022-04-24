@@ -4,6 +4,8 @@ using System.Text;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
+using SteganographyLibrary.Models;
+
 namespace SteganographyLibrary.SteganographyReversing {
     public interface IImageAnalysis {
         Rgba32[] AllColors { get; set; }
@@ -14,9 +16,9 @@ namespace SteganographyLibrary.SteganographyReversing {
 
         bool CheckIsSecure();
         IEnumerable<string> ExtractBase64(Encoding encoding, int size = 1);
-        IEnumerable<string[]> ExtractStrings(Encoding encoding, ImageAnalysis.StringExtractionOptions stringExtractionOptions);
-        string[] ExtractStringsFromRawData(Encoding encoding, byte[] data, ImageAnalysis.StringExtractionOptions stringExtractionOptions);
-        IEnumerable<string[]> ExtractStringsFromUniqueColors(Encoding encoding, ImageAnalysis.StringExtractionOptions stringExtractionOptions);
+        IEnumerable<string[]> ExtractStrings(Encoding encoding, StringExtractionOptions stringExtractionOptions);
+        string[] ExtractStringsFromRawData(Encoding encoding, byte[] data, StringExtractionOptions stringExtractionOptions);
+        IEnumerable<string[]> ExtractStringsFromUniqueColors(Encoding encoding, StringExtractionOptions stringExtractionOptions);
         Rgba32[] GetRepeatedColors(Image<Rgba32> image, int occurrences = 1);
         Image<Rgba32> GetUniqueColorImage(Image<Rgba32> image);
         Rgba32[] GetUniqueColors(Image<Rgba32> image);

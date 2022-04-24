@@ -7,6 +7,7 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
 using SteganographyLibrary.Interfaces;
+using SteganographyLibrary.Models;
 
 namespace SteganographyLibrary.SteganographyReversing {
     public class ImageAnalysis : IImageAnalysis {
@@ -120,12 +121,6 @@ namespace SteganographyLibrary.SteganographyReversing {
             foreach (var rawImageData in possibleEncodedData) {
                 yield return ExtractStringsFromRawData(encoding, rawImageData, stringExtractionOptions).ToArray();
             }
-        }
-
-        public class StringExtractionOptions {
-            public int MaxRepeatedChars { get; set; } = 3;
-            public int MinLength { get; set; } = 5;
-            public bool IsWord { get; set; }
         }
 
         public string[] ExtractStringsFromRawData(Encoding encoding, byte[] data, StringExtractionOptions stringExtractionOptions) {
